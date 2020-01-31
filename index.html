@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ninjapp</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap 4 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- Roboto -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+
+    <!-- Font awesome -->
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
+
+    <!-- only for iOS devices -->
+    <link rel="apple-touch-icon" href="/pwa-ninja/img/icon-96x96.png">
+    <meta name="apple-mobile-web-app-status-bar" content="#0377fc">
+    
+    <style>
+        /* Custom styles */
+        body {
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(253,29,29,1) 0%, rgba(252,176,69,1) 100%);
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <br>
+        <br>
+        
+        <div class="row text-center">
+            <div class="col">
+                <h1 class="h1 text-white">THE APP!</h1>
+            </div>
+        </div>
+        
+        <br>
+        <br>
+        <div class="row text-center">
+            <div class="col">
+                <button class="btn btn-outline-light" id="btn-install" >Instala la app</button>
+                <div class="h5 text-white" id="installed-label">La app ya está instalada</div>
+            </div>
+        </div>
+    
+    </div>
+    
+    <script src="js/app.js"></script>
+
+    <script>
+        let deferredInstallPrompt = null;
+
+        const pwaInstall = document.getElementById('btn-install');
+        const pwaMessage = document.getElementById('installed-label');
+
+        pwaInstall.addEventListener('click', function (evt) { // event handler for installButton - actually does PWA installation
+
+            console.log('[pwa] executing installation');
+
+            deferredInstallPrompt.prompt(); // show install prompt
+
+            pwaInstall.setAttribute('hidden', true); // hide install button
+            pwaMessage.removeAttribute('hidden'); // show install message
+
+            deferredInstallPrompt.userChoice
+            .then((choice) => {
+                if (choice.outcome === 'accepted') {
+                    console.log('[pwa] user accepted the A2HS prompt', choice);
+                } else {
+                    console.log('[pwa] user dismissed the A2HS prompt', choice);
+                }
+                deferredInstallPrompt = null;
+            });
+
+        });
+
+        window.addEventListener('beforeinstallprompt', function (evt) { // event handler for beforeinstallprompt event
+            console.log('[pwa] executing beforeinstallprompt');
+            deferredInstallPrompt = evt; // saves the event
+            pwaInstall.removeAttribute('hidden'); // show install button
+            pwaMessage.setAttribute('hidden', true); // hide install message
+        });
+
+        window.addEventListener('appinstalled', function (evt) { // event handler for appinstalled event
+            console.log('[pwa] application successfully installed', evt); // log the installation to analytics or save the event somehow
+        });
+
+    </script>
+
+    <!-- script type="text/javascript"->
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            console.log('Coomunity puede ser instalada');
+            document.getElementById('btn-install').style.display = 'block'
+            document.getElementById('installed-label').style.display = 'none'
+        });
+
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('Coomunity instalada');
+            document.getElementById('btn-install').style.display = 'none'
+            document.getElementById('installed-label').style.display = 'block'
+        });
+    </script-->
+
+</body>
+</html>
