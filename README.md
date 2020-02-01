@@ -3,12 +3,13 @@ Scaffold PWA application
 
 ## Guía para desarrollar un PWA básico
 Los siguientes archivo componen la estructura tradicional de una PWA. No es estrictamente requerida la siguiente estructura de archivos:
-│
+```bash
+│ 
 ├ _app.js_
 ├ _index.html_
 ├ _manifest.json_
 └ _serviceworker.js_
-
+```
 ### Paso 1: Verificar el soporte del Service Worker en el navegador
 Sobre el archivo **_app.js_** agregar:
 
@@ -134,8 +135,11 @@ Aquí de declara el _manifest_, el _service worker_ por medio del archivo _app.j
 > https://developers.google.com/web/fundamentals/app-install-banners
 
 ### Nota: Etiquetas en el index.html para iOS
+
+```html
 <link rel="manifest" href="/manifest" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="#aa7700" />
 <meta name="apple-mobile-web-app-title" content="Nombre_de_mi_App" />
 <meta name="theme-color" content="#9c27b0" />
+```
